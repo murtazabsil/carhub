@@ -1,0 +1,51 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:c="http://java.sun.com/jsp/jstl/core">
+<h:head>
+	<h:outputStylesheet library="css" name="jquery-ui.css"></h:outputStylesheet>
+	<h:outputStylesheet library="css" name="dataTables.jqueryui.min.css"></h:outputStylesheet>
+	<h:outputStylesheet library="css" name="bootstrap.min.css"></h:outputStylesheet>
+	<h:outputStylesheet library="css" name="bootstrap-theme.min.css"></h:outputStylesheet>
+	<h:outputScript library="js" name="jquery-1.11.3.min.js"></h:outputScript>
+	<h:outputScript library="js" name="jquery-ui-1.10.4.custom.min.js"></h:outputScript>
+	<h:outputScript library="js" name="jquery.dataTables.min.js"></h:outputScript>
+	<h:outputScript library="js" name="dataTables.jqueryui.min.js"></h:outputScript>
+	<h:outputScript library="js" name="bootstrap.min.js"></h:outputScript>
+	<h:outputScript library="js" name="npm.js"></h:outputScript>
+</h:head>
+<nav class="navbar navbar-inverse navbar-fixed-top">
+	<div class="container">
+		<div class="navbar-header">
+			<button aria-controls="navbar" aria-expanded="false"
+				data-target="#navbar" data-toggle="collapse"
+				class="navbar-toggle collapsed" type="button">
+				<span class="sr-only">Toggle navigation</span> <span
+					class="icon-bar"></span> <span class="icon-bar"></span> <span
+					class="icon-bar"></span>
+			</button>
+			<h:graphicImage style="width: 200px; height: 50px;"
+				value="/dataentry/faces/javax.faces.resource/images/logo.png"></h:graphicImage>
+			<!-- <a href="#" class="navbar-brand"><h:graphicImage
+					value="/dataentry/faces/javax.faces.resource/images/logo.png"></h:graphicImage></a> -->
+		</div>
+		<div class="navbar-collapse collapse" id="navbar">
+			<ul class="nav navbar-nav">
+				<li class="active"><h:link value="Customers" outcome="customer"></h:link></li>
+				<li><h:link value="Vehicle" outcome="vehicle"></h:link></li>
+				<li></li>
+				<li class="dropdown"><a aria-expanded="false"
+					aria-haspopup="true" role="button" data-toggle="dropdown"
+					class="dropdown-toggle" href="#">Jobs<span class="caret"></span></a>
+					<ul class="dropdown-menu">
+						<li><h:link value="Job for New User" outcome="newJob"></h:link></li>
+						<li><h:link value="Jobs for Exixting User" outcome="job"></h:link></li>
+						<li><h:link value="Job for New Vehicle" outcome="newJobVehicle"></h:link></li>
+					</ul></li>
+			</ul>
+		</div>
+		<!--/.nav-collapse -->
+	</div>
+</nav>
+</html>

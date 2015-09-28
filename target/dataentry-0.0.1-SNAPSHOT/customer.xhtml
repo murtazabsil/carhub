@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:c="http://java.sun.com/jsp/jstl/core">
+
+<h:head>
+	<title>Customers</title>
+	<ui:include src="/header.xhtml"></ui:include>
+	<script type="text/javascript">
+		var customerNames = #{carhubService.customerNames()};
+		$(function() {
+			$("#customer-form\\:sold-date,#customer-form\\:job-date")
+					.datepicker(
+							{
+								showOn : "button",
+								buttonImage : "/dataentry/faces/javax.faces.resource/images/calendar.gif",
+								buttonImageOnly : true,
+								buttonText : "Select date",
+								changeMonth : true,
+								changeYear : true
+							});
+			$("#customer-form\\:sold-date,#customer-form\\:job-date")
+					.datepicker("option", "dateFormat", 'mm-dd-yy');
+			$('#customer-list').dataTable();
+			$('#customer-form\\:name').attr('placeholder', 'Customer Name');
+			$('#customer-form\\:email-id').attr('placeholder', 'Email Id');
+			$('#customer-form\\:contact').attr('placeholder', 'Contact');
+			$('#customer-form\\:address').attr('placeholder', 'Address');
+			$('#customer-form\\:name').autocomplete({
+				source : customerNames
+			})
+		});
+	</script>
+	<style>
+#customer-list tr th, #customer-list tr td {
+	text-align: center;
+}
+
+#main-container {
+	margin-top: 60px;
+}
+
+#form-container h1 {
+	text-align: center;
+}
+
+.btn {
+	margin-right: 10px;
+}
+</style>
+</h:head>
+<h:body>
+	<div id="main-container" class="container">
+		<div id="messages" class="alert alert-danger">
+			<h:messages></h:messages>
+		</div>
+		<div id="form-container" class="row">
+			<h1>Add Customer</h1>
+			<h:form id="customer-form">
+				<div class="col-md-12">
+					<table class="table">
+						<tr>
+							<td><h:inputText required="true" styleClass="form-control"
+									placeholder="Customer Name" id="name"
+									value="#{customer.customerName}"></h:inputText></td>
+							<td><h:inputText required="true" styleClass="form-control"
+									id="email-id" value="#{customer.emailId}"></h:inputText></td>
+						</tr>
+						<tr>
+							<td><h:inputText required="true" styleClass="form-control"
+									id="contact" value="#{customer.contact}"></h:inputText></td>
+							<td><h:inputTextarea styleClass="form-control" cols="30"
+									rows="2" id="address" value="#{customer.address}"></h:inputTextarea></td>
+						</tr>
+						<tr align="center">
+							<td colspan="2"><input type="reset" class="btn btn-danger"
+								value="Reset" /> <h:commandButton styleClass="btn btn-success"
+									action="#{carhubService.addCustomer(customer)}"
+									value="Add Customer"></h:commandButton></td>
+						</tr>
+					</table>
+				</div>
+			</h:form>
+		</div>
+		<div id="table-container">
+			<c:if test="${!empty carhubService.listCustomer()}">
+				<table id="customer-list" class="display" cellspacing="0"
+					width="100%">
+					<thead>
+						<tr>
+							<th width="80">Customer Id</th>
+							<th width="120">Customer Name</th>
+							<th width="120">Address</th>
+							<th width="120">Email Id</th>
+							<th width="120">Contact</th>
+							<th width="120">View Vehicle</th>
+							<th width="120">View Job</th>
+							<th width="120">Edit</th>
+						</tr>
+					</thead>
+					<tbody>
+						<ui:repeat value="${carhubService.listCustomer()}" var="customer">
+							<tr>
+								<td>${customer.customerId}</td>
+								<td>${customer.customerName}</td>
+								<td>${customer.address}</td>
+								<td>${customer.emailId}</td>
+								<td>${customer.contact}</td>
+								<td><h:link outcome="vehicle" value="View">
+										<f:param name="customerId" value="#{customer.customerId}" />
+									</h:link></td>
+								<td><a
+									href="http://localhost:8080/dataentry/faces/job.xhtml">View</a></td>
+								<td>Edit</td>
+							</tr>
+						</ui:repeat>
+					</tbody>
+				</table>
+			</c:if>
+		</div>
+	</div>
+</h:body>
+</html>

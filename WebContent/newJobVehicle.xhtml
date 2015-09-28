@@ -1,0 +1,189 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:c="http://java.sun.com/jsp/jstl/core">
+<h:head>
+	<title>Job for New Vehicle</title>
+	<ui:include src="/header.xhtml"></ui:include>
+	<script type="text/javascript">
+		var customerNames = #{carhubService.customerNames()};
+		var dataItemNames = #{carhubService.listDataItems()};
+		var particularVOData = #{carhubService.sampleParticularVOData()};
+		$(function() {
+			$('#job-form\\:name').attr('placeholder', 'Customer Name');
+			$('#job-form\\:email-id').attr('placeholder', 'Email Id');
+			$('#job-form\\:contact').attr('placeholder', 'Contact');
+			$('#job-form\\:address').attr('placeholder', 'Address');
+			
+			$("#job-form\\:sold-date")
+					.datepicker(
+							{
+								showOn : "button",
+								buttonImage : "/dataentry/faces/javax.faces.resource/images/calendar.gif",
+								buttonImageOnly : true,
+								buttonText : "Select date",
+								changeMonth : true,
+								changeYear : true
+							});
+			$("#job-form\\:sold-date")
+					.datepicker("option", "dateFormat", 'yy-mm-dd');
+			$('#job-form\\:vehicle-number').attr('placeholder', 'Vehicle Number');
+			$('#job-form\\:model').attr('placeholder', 'Model');
+			$('#job-form\\:sold-date').attr('placeholder', 'Sold Date');
+			$('#job-form\\:kilometre').attr('placeholder', 'Kilometers');
+			$('#job-form\\:name').autocomplete({
+				source : customerNames
+			});
+			$('.service-name').autocomplete({
+				source : dataItemNames
+			});
+		});
+		
+		function addRow(currentElement){
+			var parentTr = $(currentElement).closest('tr');
+			 parentTr.clone().insertAfter(parentTr);
+			 $('.service-name').autocomplete({
+					source : dataItemNames
+				});
+		}
+		
+		function removeRow(currentElement){
+			var parentTr = $(currentElement).closest('tr');
+			parentTr.remove();
+		}
+		
+		function validateAndCreateRequestData(){
+			var data = Array();
+			if($('input[name=job-form\\:job-type-radio]:checked').length === 0)
+				return false;
+			$('.particular-row').each(function(){
+				particularVOData.jobType = $('input[name=job-form\\:job-type-radio]:checked').val();
+				particularVOData.itemData = $(this).find('.service-name')[0].value;
+				particularVOData.partPrice = $(this).find('.part-price')[0].value;
+				particularVOData.labourPrice = $(this).find('.labour-price')[0].value;
+				particularVOData.totalPrice = $(this).find('.total-price')[0].value;
+				data.push(particularVOData);
+			});
+			$('#job-form\\:particular-data-hidden').val(JSON.stringify(data));
+			return true;
+		}
+		
+		function addTotalPrice(element){
+			var partPrice = parseFloat($(element).parent().parent().find('.part-price')[0].value) ;
+			var labourPrice = parseFloat($(element).parent().parent().find('.labour-price')[0].value);
+			$(element).parent().parent().find('.total-price')[0].value = (isNaN(partPrice) ? 0 : partPrice) + (isNaN(labourPrice) ? 0 : labourPrice);
+		}
+	</script>
+	<style>
+#customer-list tr th, #customer-list tr td {
+	text-align: center;
+}
+
+#main-container {
+	margin-top: 60px;
+}
+
+#form-container h1 {
+	text-align: center;
+}
+
+.btn {
+	margin-right: 10px;
+}
+
+#particulars-table th, #particulars-table td {
+	text-align: center;
+}
+</style>
+</h:head>
+<h:body>
+	<div id="main-container" class="container">
+		<div id="messages" class="alert alert-danger">
+			<h:messages></h:messages>
+		</div>
+		<div id="form-container" class="row">
+			<h:form id="job-form">
+				<div class="col-md-12">
+					<h1>Add Customer</h1>
+					<table class="table">
+						<tr>
+							<td><h:inputText required="true" styleClass="form-control"
+									placeholder="Customer Name" id="name"
+									value="#{carhubService.customerInfo}"></h:inputText></td>
+						</tr>
+					</table>
+					<div class="col-md-12">
+						<h1>Add Vehicle</h1>
+						<table class="table">
+							<tr>
+								<td><h:inputText required="true" styleClass="form-control"
+										id="vehicle-number" value="#{vehicle.vehicleNumber}">
+									</h:inputText></td>
+								<td><h:inputText required="true" styleClass="form-control"
+										id="model" value="#{vehicle.model}"></h:inputText></td>
+							</tr>
+							<tr>
+								<td><h:inputText required="true" styleClass="form-control"
+										id="sold-date" value="#{vehicle.soldDate}">
+										<f:convertDateTime pattern="yyyy-MM-dd" />
+									</h:inputText></td>
+								<td><h:inputText required="true" styleClass="form-control"
+										id="kilometre" value="#{vehicle.kilometre}"></h:inputText></td>
+							</tr>
+						</table>
+					</div>
+					<div class="col-md-12">
+						<h1>Add Job</h1>
+						<table class="table" id="particulars-table">
+							<tr>
+								<td>Type of Service :</td>
+								<td><h:selectOneRadio id="job-type-radio">
+										<f:selectItems value="#{carhubService.listJobTypes()}"
+											var="jobType" itemLabel="#{jobType.jobTypeName}"
+											itemValue="#{jobType.jobTypeId}" />
+									</h:selectOneRadio></td>
+							</tr>
+							<tr>
+								<th colspan="5">Particulars</th>
+							</tr>
+							<tr>
+								<th>Service</th>
+								<th>Parts Cost</th>
+								<th>labour Cost</th>
+								<th>Total Cost</th>
+								<th></th>
+							</tr>
+							<tr class="particular-row">
+								<td><input type="text" class="form-control service-name"></input></td>
+								<td><input type="number" onchange="addTotalPrice(this)"
+									class="form-control part-price"></input></td>
+								<td><input type="number" onchange="addTotalPrice(this)"
+									class="form-control labour-price"></input></td>
+								<td><input type="number" readonly="readonly"
+									class="form-control total-price"></input></td>
+								<td><input type="button" class="btn" value="+"
+									onclick="addRow(this)" /><input type="button" class="btn"
+									value="-" onclick="removeRow(this)" /></td>
+							</tr>
+							<tr align="center" class="button-row">
+								<td colspan="5"><input type="reset" class="btn btn-danger"
+									value="Reset" /> <h:commandButton
+										onclick="return validateAndCreateRequestData();"
+										styleClass="btn btn-success"
+										action="#{carhubService.addJob(vehicle)}" value="Add Job"></h:commandButton></td>
+							</tr>
+						</table>
+					</div>
+				</div>
+				<h:inputHidden id="particular-data-hidden"
+					value="#{carhubService.jobParticularData}"></h:inputHidden>
+			</h:form>
+		</div>
+	</div>
+</h:body>
+</html>
