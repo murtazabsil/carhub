@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:c="http://java.sun.com/jsp/jstl/core">
+
+<h:head>
+	<title>Users</title>
+	<ui:include src="/header.xhtml"></ui:include>
+	<script type="text/javascript">
+		$(function() {
+			$('#customer-list').dataTable();
+			$('#user-form\\:name').attr('placeholder', 'User Name');
+			$('#user-form\\:password').attr('placeholder', 'Password');
+		});
+	</script>
+	<style>
+#customer-list tr th, #customer-list tr td {
+	text-align: center;
+}
+
+#main-container {
+	margin-top: 60px;
+}
+
+#form-container h1 {
+	text-align: center;
+}
+
+.btn {
+	margin-right: 10px;
+}
+</style>
+</h:head>
+<h:body>
+	<div id="main-container" class="container">
+		<div id="messages">
+			<h:messages styleClass="alert alert-danger"></h:messages>
+		</div>
+		<div id="form-container">
+			<h:form id="user-form">
+				<table class="table">
+					<tr>
+						<td><h:inputText required="true" styleClass="form-control"
+								id="name" value="#{user.userName}"></h:inputText></td>
+						<td><h:inputSecret required="true" styleClass="form-control"
+								id="password" value="#{user.password}"></h:inputSecret></td>
+					</tr>
+					<tr>
+						<td>Is Admin</td>
+						<td><h:selectOneRadio required="true" id="isadmin-radio"
+								value="#{user.isadmin}">
+								<f:selectItem itemValue="#{true}" itemLabel="Yes" />
+								<f:selectItem itemValue="#{false}" itemLabel="No" />
+							</h:selectOneRadio></td>
+					</tr>
+					<tr align="center" class="button-row">
+						<td colspan="5"><input type="reset" class="btn btn-danger"
+							value="Reset" /> <h:commandButton styleClass="btn btn-success"
+								action="#{carhubService.addUser(user)}" value="Add User"></h:commandButton></td>
+					</tr>
+				</table>
+			</h:form>
+		</div>
+		<div id="table-container">
+			<c:if test="${!empty carhubService.listUsers()}">
+				<h1 align="center">Customer List</h1>
+				<table id="customer-list" class="display" cellspacing="0"
+					width="100%">
+					<thead>
+						<tr>
+							<th width="80">User Id</th>
+							<th width="120">User Name</th>
+							<th width="120">Is Admin</th>
+							<th width="120">Edit</th>
+						</tr>
+					</thead>
+					<tbody>
+						<ui:repeat value="${carhubService.listUsers()}" var="user">
+							<tr>
+								<td>${user.userId}</td>
+								<td>${user.userName}</td>
+								<td>${user.isadmin}</td>
+								<td>Edit</td>
+							</tr>
+						</ui:repeat>
+					</tbody>
+				</table>
+			</c:if>
+		</div>
+	</div>
+</h:body>
+</html>

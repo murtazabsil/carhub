@@ -106,76 +106,85 @@
 		<div id="form-container" class="row">
 			<h:form id="job-form">
 				<div class="col-md-12">
+					<h1>Add Customer</h1>
 					<table class="table">
 						<tr>
 							<td><h:inputText required="true" styleClass="form-control"
 									placeholder="Customer Name" id="name"
 									value="#{customer.customerName}"></h:inputText></td>
+							<td><h:inputText required="true" styleClass="form-control"
+									id="email-id" value="#{customer.emailId}"></h:inputText></td>
+						</tr>
+						<tr>
+							<td><h:inputText required="true" styleClass="form-control"
+									id="contact" value="#{customer.contact}"></h:inputText></td>
+							<td><h:inputTextarea styleClass="form-control" cols="30"
+									rows="2" id="address" value="#{customer.address}"></h:inputTextarea></td>
 						</tr>
 					</table>
-					<div class="col-md-12">
-						<h1>Add Vehicle</h1>
-						<table class="table">
-							<tr>
-								<td><h:inputText required="true" styleClass="form-control"
-										id="vehicle-number" value="#{vehicle.vehicleNumber}">
-									</h:inputText></td>
-								<td><h:inputText required="true" styleClass="form-control"
-										id="model" value="#{vehicle.model}"></h:inputText></td>
-							</tr>
-							<tr>
-								<td><h:inputText required="true" styleClass="form-control"
-										id="sold-date" value="#{vehicle.soldDate}">
-										<f:convertDateTime pattern="yyyy-MM-dd" />
-									</h:inputText></td>
-								<td><h:inputText required="true" styleClass="form-control"
-										id="kilometre" value="#{vehicle.kilometre}"></h:inputText></td>
-							</tr>
-						</table>
-					</div>
-					<div class="col-md-12">
-						<h1>Add Job</h1>
-						<table class="table" id="particulars-table">
-							<tr>
-								<td>Type of Service :</td>
-								<td><h:selectOneRadio id="job-type-radio">
-										<f:selectItems value="#{carhubService.listJobTypes()}"
-											var="jobType" itemLabel="#{jobType.jobTypeName}"
-											itemValue="#{jobType.jobTypeId}" />
-									</h:selectOneRadio></td>
-							</tr>
-							<tr>
-								<th colspan="5">Particulars</th>
-							</tr>
-							<tr>
-								<th>Service</th>
-								<th>Parts Cost</th>
-								<th>labour Cost</th>
-								<th>Total Cost</th>
-								<th></th>
-							</tr>
-							<tr class="particular-row">
-								<td><input type="text" class="form-control service-name"></input></td>
-								<td><input type="number" onchange="addTotalPrice(this)"
-									class="form-control part-price"></input></td>
-								<td><input type="number" onchange="addTotalPrice(this)"
-									class="form-control labour-price"></input></td>
-								<td><input type="number" readonly="readonly"
-									class="form-control total-price"></input></td>
-								<td><input type="button" class="btn" value="+"
-									onclick="addRow(this)" /><input type="button" class="btn"
-									value="-" onclick="removeRow(this)" /></td>
-							</tr>
-							<tr align="center" class="button-row">
-								<td colspan="5"><input type="reset" class="btn btn-danger"
-									value="Reset" /> <h:commandButton
-										onclick="return validateAndCreateRequestData();"
-										styleClass="btn btn-success"
-										action="#{carhubService.addJob(customer,vehicle)}"
-										value="Add Job"></h:commandButton></td>
-							</tr>
-						</table>
-					</div>
+				</div>
+				<div class="col-md-12">
+					<h1>Add Vehicle</h1>
+					<table class="table">
+						<tr>
+							<td><h:inputText required="true" styleClass="form-control"
+									id="vehicle-number" value="#{vehicle.vehicleNumber}">
+								</h:inputText></td>
+							<td><h:inputText required="true" styleClass="form-control"
+									id="model" value="#{vehicle.model}"></h:inputText></td>
+						</tr>
+						<tr>
+							<td><h:inputText required="true" styleClass="form-control"
+									id="sold-date" value="#{vehicle.soldDate}">
+									<f:convertDateTime pattern="yyyy-MM-dd" />
+								</h:inputText></td>
+							<td><h:inputText required="true" styleClass="form-control"
+									id="kilometre" value="#{vehicle.kilometre}"></h:inputText></td>
+						</tr>
+					</table>
+				</div>
+				<div class="col-md-12">
+					<h1>Add Job</h1>
+					<table class="table" id="particulars-table">
+						<tr>
+							<td>Type of Service :</td>
+							<td><h:selectOneRadio id="job-type-radio">
+									<f:selectItems value="#{carhubService.listJobTypes()}"
+										var="jobType" itemLabel="#{jobType.jobTypeName}"
+										itemValue="#{jobType.jobTypeId}" />
+								</h:selectOneRadio></td>
+						</tr>
+						<tr>
+							<th colspan="5">Particulars</th>
+						</tr>
+						<tr>
+							<th>Service</th>
+							<th>Parts Cost</th>
+							<th>labour Cost</th>
+							<th>Total Cost</th>
+							<th></th>
+						</tr>
+						<tr class="particular-row">
+							<td><input type="text" class="form-control service-name"></input></td>
+							<td><input type="number" onchange="addTotalPrice(this)"
+								class="form-control part-price"></input></td>
+							<td><input type="number" onchange="addTotalPrice(this)"
+								class="form-control labour-price"></input></td>
+							<td><input type="number" readonly="readonly"
+								class="form-control total-price"></input></td>
+							<td><input type="button" class="btn" value="+"
+								onclick="addRow(this)" /><input type="button" class="btn"
+								value="-" onclick="removeRow(this)" /></td>
+						</tr>
+						<tr align="center" class="button-row">
+							<td colspan="5"><input type="reset" class="btn btn-danger"
+								value="Reset" /> <h:commandButton
+									onclick="return validateAndCreateRequestData();"
+									styleClass="btn btn-success"
+									action="#{carhubService.addJob(customer,vehicle)}"
+									value="Add Job"></h:commandButton></td>
+						</tr>
+					</table>
 				</div>
 				<h:inputHidden id="particular-data-hidden"
 					value="#{carhubService.jobParticularData}"></h:inputHidden>

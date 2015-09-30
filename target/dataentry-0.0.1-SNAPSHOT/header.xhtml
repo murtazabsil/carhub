@@ -32,20 +32,16 @@
 		</div>
 		<div class="navbar-collapse collapse" id="navbar">
 			<ul class="nav navbar-nav">
-				<li class="active"><a href="#">Home</a></li>
-				<li><a href="#about">About</a></li>
-				<li><a href="#contact">Contact</a></li>
+				<li class="active"><h:link value="Customers" outcome="customer"></h:link></li>
+				<li><h:link value="Vehicle" outcome="vehicle"></h:link></li>
+				<li></li>
 				<li class="dropdown"><a aria-expanded="false"
 					aria-haspopup="true" role="button" data-toggle="dropdown"
-					class="dropdown-toggle" href="#">Dropdown <span class="caret"></span></a>
+					class="dropdown-toggle" href="#">Jobs<span class="caret"></span></a>
 					<ul class="dropdown-menu">
-						<li><a href="#">Action</a></li>
-						<li><a href="#">Another action</a></li>
-						<li><a href="#">Something else here</a></li>
-						<li class="divider" role="separator"></li>
-						<li class="dropdown-header">Nav header</li>
-						<li><a href="#">Separated link</a></li>
-						<li><a href="#">One more separated link</a></li>
+						<li><h:link value="Job for New User" outcome="newJob"></h:link></li>
+						<li><h:link value="Jobs for Exixting User" outcome="job"></h:link></li>
+						<li><h:link value="Job for New Vehicle" outcome="newJobVehicle"></h:link></li>
 					</ul></li>
 			</ul>
 		</div>

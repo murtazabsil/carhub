@@ -15,12 +15,22 @@
 		var customerNames = #{carhubService.customerNames()};
 		$(function() {
 			$('#customer-list').dataTable();
-			$('#customer-form\\:name').attr('placeholder', 'Customer Name');
-			$('#customer-form\\:email-id').attr('placeholder', 'Email Id');
-			$('#customer-form\\:contact').attr('placeholder', 'Contact');
-			$('#customer-form\\:address').attr('placeholder', 'Address');
-			$('#customer-form\\:name').autocomplete({
-				source : customerNames
+			$('#popup-customer\\:name').attr('placeholder', 'Customer Name');
+			$('#popup-customer\\:email-id').attr('placeholder', 'Email Id');
+			$('#popup-customer\\:contact').attr('placeholder', 'Contact');
+			$('#popup-customer\\:address').attr('placeholder', 'Address');
+			$('.edit-customer').click(function(){
+				var parent = $(this).parent();
+				$('#popup-customer\\:customer-id').val($(parent).find('.customer-id').html());
+				$('#popup-customer\\:name').val($(parent).find('.customer-name').html());
+				$('#popup-customer\\:email-id').val($(parent).find('.email-id').html());
+				$('#popup-customer\\:contact').val($(parent).find('.contact').html());
+				$('#popup-customer\\:address').val($(parent).find('.address').html());
+				$('#popup-container').dialog({
+					modal: true,
+					width: 800,
+					height: 200,
+				});
 			});
 		});
 	</script>
@@ -43,40 +53,39 @@
 </style>
 </h:head>
 <h:body>
+	<div id="popup-container" title="Edit Customer Details."
+		style="display: none;">
+		<h:form id="popup-customer">
+			<table class="table">
+				<tr>
+					<td><h:inputHidden id="customer-id"
+							value="#{customer.customerId}"></h:inputHidden> <h:inputText
+							required="true" styleClass="form-control"
+							placeholder="Customer Name" id="name"
+							value="#{customer.customerName}"></h:inputText></td>
+					<td><h:inputText required="true" styleClass="form-control"
+							id="email-id" value="#{customer.emailId}"></h:inputText></td>
+				</tr>
+				<tr>
+					<td><h:inputText required="true" styleClass="form-control"
+							id="contact" value="#{customer.contact}"></h:inputText></td>
+					<td><h:inputTextarea styleClass="form-control" cols="30"
+							rows="2" id="address" value="#{customer.address}"></h:inputTextarea></td>
+				</tr>
+				<tr>
+					<td colspan="2" align="center"><h:commandButton styleClass="btn btn-success"
+							action="#{carhubService.addCustomer(customer)}" value="Update"></h:commandButton></td>
+				</tr>
+			</table>
+		</h:form>
+	</div>
 	<div id="main-container" class="container">
 		<div id="messages">
 			<h:messages styleClass="alert alert-danger"></h:messages>
 		</div>
-		<div id="form-container" class="row">
-			<h1>Add Customer</h1>
-			<h:form id="customer-form">
-				<div class="col-md-12">
-					<table class="table">
-						<tr>
-							<td><h:inputText required="true" styleClass="form-control"
-									placeholder="Customer Name" id="name"
-									value="#{customer.customerName}"></h:inputText></td>
-							<td><h:inputText required="true" styleClass="form-control"
-									id="email-id" value="#{customer.emailId}"></h:inputText></td>
-						</tr>
-						<tr>
-							<td><h:inputText required="true" styleClass="form-control"
-									id="contact" value="#{customer.contact}"></h:inputText></td>
-							<td><h:inputTextarea styleClass="form-control" cols="30"
-									rows="2" id="address" value="#{customer.address}"></h:inputTextarea></td>
-						</tr>
-						<tr align="center">
-							<td colspan="2"><input type="reset" class="btn btn-danger"
-								value="Reset" /> <h:commandButton styleClass="btn btn-success"
-									action="#{carhubService.addCustomer(customer)}"
-									value="Add Customer"></h:commandButton></td>
-						</tr>
-					</table>
-				</div>
-			</h:form>
-		</div>
 		<div id="table-container">
 			<c:if test="${!empty carhubService.listCustomer()}">
+				<h1 align="center">Customer List</h1>
 				<table id="customer-list" class="display" cellspacing="0"
 					width="100%">
 					<thead>
@@ -94,17 +103,17 @@
 					<tbody>
 						<ui:repeat value="${carhubService.listCustomer()}" var="customer">
 							<tr>
-								<td>${customer.customerId}</td>
-								<td>${customer.customerName}</td>
-								<td>${customer.address}</td>
-								<td>${customer.emailId}</td>
-								<td>${customer.contact}</td>
+								<td class="customer-id">${customer.customerId}</td>
+								<td class="customer-name">${customer.customerName}</td>
+								<td class="address">${customer.address}</td>
+								<td class="email-id">${customer.emailId}</td>
+								<td class="contact">${customer.contact}</td>
 								<td><h:link outcome="vehicle" value="View">
 										<f:param name="customerId" value="#{customer.customerId}" />
 									</h:link></td>
 								<td><a
 									href="http://localhost:8080/dataentry/faces/job.xhtml">View</a></td>
-								<td>Edit</td>
+								<td style="cursor: pointer;" class="edit-customer">Edit</td>
 							</tr>
 						</ui:repeat>
 					</tbody>

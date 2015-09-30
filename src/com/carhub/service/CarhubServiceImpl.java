@@ -63,7 +63,10 @@ public class CarhubServiceImpl implements CarhubService {
 	@Override
 	@Transactional
 	public List<Vehicle> listVehicle(long customerId) {
-		return this.carhubDAO.listVehicle(customerId);
+		if(customerId != 0)
+			return this.carhubDAO.listVehicle(customerId);
+		else 
+			return this.carhubDAO.listVehicle();
 	}
 
 	@Override

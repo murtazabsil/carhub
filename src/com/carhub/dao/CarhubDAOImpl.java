@@ -38,7 +38,10 @@ public class CarhubDAOImpl implements CarhubDAO {
 	public void addCustomer(Customer customer) {
 		// TODO Auto-generated method stub
 		Session session = this.sessionFactory.getCurrentSession();
-		session.persist(customer);
+		if (customer.getCustomerId() != null)
+			session.update(customer);
+		else
+			session.persist(customer);
 		logger.info("Customer added successfully with customer details as :"
 				+ customer);
 	}
@@ -56,16 +59,21 @@ public class CarhubDAOImpl implements CarhubDAO {
 	public void addVehicle(Vehicle vehicle, String customerInfo) {
 		// TODO Auto-generated method stub
 		Session session = this.sessionFactory.getCurrentSession();
-		if (customerInfo.indexOf("|") != -1) {
-			String splittedCustomer[] = customerInfo.split("|");
-			vehicle.setCustomer(getCustomer(Long.parseLong(splittedCustomer[0])));
+		if (vehicle.getVehicleId() != null) {
+			session.update(vehicle);
 		} else {
-			Customer customer = new Customer();
-			customer.setCustomerName(customerInfo);
-			session.persist(customer);
-			vehicle.setCustomer(customer);
+			if (customerInfo.indexOf("|") != -1) {
+				String splittedCustomer[] = customerInfo.split("|");
+				vehicle.setCustomer(getCustomer(Long
+						.parseLong(splittedCustomer[0])));
+			} else {
+				Customer customer = new Customer();
+				customer.setCustomerName(customerInfo);
+				session.persist(customer);
+				vehicle.setCustomer(customer);
+			}
+			session.persist(vehicle);
 		}
-		session.persist(vehicle);
 		logger.info("Customer added successfully with customer details as :"
 				+ vehicle);
 	}
@@ -139,7 +147,7 @@ public class CarhubDAOImpl implements CarhubDAO {
 		// TODO Auto-generated method stub
 		Session session = this.sessionFactory.getCurrentSession();
 		@SuppressWarnings("unchecked")
-		List<User> users = session.createQuery("from Customer").list();
+		List<User> users = session.createQuery("from User").list();
 		return users;
 	}
 
@@ -230,9 +238,10 @@ public class CarhubDAOImpl implements CarhubDAO {
 			if (particularVO.getItemData().indexOf("|") != -1) {
 				String splittedItemData[] = particularVO.getItemData().split(
 						"|");
-				itemData = (ItemData) session.createQuery(
-						"From ItemData where itemId = :itemId").setLong(
-						"itemId", Long.parseLong(splittedItemData[0])).uniqueResult();
+				itemData = (ItemData) session
+						.createQuery("From ItemData where itemId = :itemId")
+						.setLong("itemId", Long.parseLong(splittedItemData[0]))
+						.uniqueResult();
 			} else {
 				itemData = new ItemData();
 				itemData.setItemName(particularVO.getItemData());
@@ -282,8 +291,9 @@ public class CarhubDAOImpl implements CarhubDAO {
 		@SuppressWarnings("unchecked")
 		List<ItemData> itemDatas = session.createQuery("FROM ItemData").list();
 		List<String> listDataItems = new ArrayList<String>();
-		for(ItemData itemData : itemDatas)
-			listDataItems.add(itemData.getItemId() + "|" + itemData.getItemName());
+		for (ItemData itemData : itemDatas)
+			listDataItems.add(itemData.getItemId() + "|"
+					+ itemData.getItemName());
 		return new Gson().toJson(listDataItems);
 	}
 }

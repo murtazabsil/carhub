@@ -14,18 +14,6 @@
 	<script type="text/javascript">
 		var customerNames = #{carhubService.customerNames()};
 		$(function() {
-			$("#customer-form\\:sold-date,#customer-form\\:job-date")
-					.datepicker(
-							{
-								showOn : "button",
-								buttonImage : "/dataentry/faces/javax.faces.resource/images/calendar.gif",
-								buttonImageOnly : true,
-								buttonText : "Select date",
-								changeMonth : true,
-								changeYear : true
-							});
-			$("#customer-form\\:sold-date,#customer-form\\:job-date")
-					.datepicker("option", "dateFormat", 'mm-dd-yy');
 			$('#customer-list').dataTable();
 			$('#customer-form\\:name').attr('placeholder', 'Customer Name');
 			$('#customer-form\\:email-id').attr('placeholder', 'Email Id');
@@ -33,7 +21,7 @@
 			$('#customer-form\\:address').attr('placeholder', 'Address');
 			$('#customer-form\\:name').autocomplete({
 				source : customerNames
-			})
+			});
 		});
 	</script>
 	<style>
@@ -56,8 +44,8 @@
 </h:head>
 <h:body>
 	<div id="main-container" class="container">
-		<div id="messages" class="alert alert-danger">
-			<h:messages></h:messages>
+		<div id="messages">
+			<h:messages styleClass="alert alert-danger"></h:messages>
 		</div>
 		<div id="form-container" class="row">
 			<h1>Add Customer</h1>

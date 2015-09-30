@@ -15,9 +15,8 @@
 	<title>Vehicles</title>
 	<ui:include src="/header.xhtml"></ui:include>
 	<script type="text/javascript">
-		var customerNames = #{carhubService.customerNames()};
 		$(function() {
-			$("#vehicle-form\\:sold-date")
+			$("#popup-vehicle\\:sold-date")
 					.datepicker(
 							{
 								showOn : "button",
@@ -27,17 +26,34 @@
 								changeMonth : true,
 								changeYear : true
 							});
-			$("#vehicle-form\\:sold-date")
-					.datepicker("option", "dateFormat", 'yy-mm-dd');
+			$("#popup-vehicle\\:sold-date").datepicker("option", "dateFormat",
+					'yy-mm-dd');
 			$('#vehicle-list').dataTable();
-			$('#vehicle-form\\:name').attr('placeholder', 'Customer Name');
-			$('#vehicle-form\\:vehicle-number').attr('placeholder', 'Vehicle Number');
-			$('#vehicle-form\\:model').attr('placeholder', 'Model');
-			$('#vehicle-form\\:sold-date').attr('placeholder', 'Sold Date');
-			$('#vehicle-form\\:kilometre').attr('placeholder', 'Kilometers');
-			$('#vehicle-form\\:name').autocomplete({
-				source : customerNames
-			})
+			$('#popup-vehicle\\:name').attr('placeholder', 'Customer Name');
+			$('#popup-vehicle\\:vehicle-number').attr('placeholder',
+					'Vehicle Number');
+			$('#popup-vehicle\\:model').attr('placeholder', 'Model');
+			$('#popup-vehicle\\:sold-date').attr('placeholder', 'Sold Date');
+			$('#popup-vehicle\\:kilometre').attr('placeholder', 'Kilometers');
+			$('.edit-vehicle').click(
+					function() {
+						var parent = $(this).parent();
+						$('#popup-vehicle\\:vehicle-id').val(
+								$(parent).find('.vehicle-id').html());
+						$('#popup-vehicle\\:vehicle-number').val(
+								$(parent).find('.vehicle-number').html());
+						$('#popup-vehicle\\:model').val(
+								$(parent).find('.model').html());
+						$('#popup-vehicle\\:sold-date').val(
+								$(parent).find('.sold-date').html());
+						$('#popup-vehicle\\:kilometre').val(
+								$(parent).find('.kilometre').html());
+						$('#popup-container').dialog({
+							modal : true,
+							width : 800,
+							height : 270,
+						});
+					});
 		});
 	</script>
 	<style>
@@ -59,47 +75,42 @@
 </style>
 </h:head>
 <h:body>
+	<div id="popup-container" title="Edit Customer Details."
+		style="display: none;">
+		<h:form id="popup-vehicle">
+			<table class="table">
+				<tr>
+					<td><h:inputHidden id="vehicle-id"
+							value="#{vehicle.vehicleId}"></h:inputHidden> <h:inputText
+							required="true" styleClass="form-control" id="vehicle-number"
+							value="#{vehicle.vehicleNumber}">
+						</h:inputText></td>
+					<td><h:inputText required="true" styleClass="form-control"
+							id="model" value="#{vehicle.model}"></h:inputText></td>
+				</tr>
+				<tr>
+					<td><h:inputText required="true" styleClass="form-control"
+							id="sold-date" value="#{vehicle.soldDate}">
+							<f:convertDateTime pattern="yyyy-MM-dd" />
+						</h:inputText></td>
+					<td><h:inputText required="true" styleClass="form-control"
+							id="kilometre" value="#{vehicle.kilometre}"></h:inputText></td>
+				</tr>
+				<tr>
+					<td colspan="2" align="center"><h:commandButton
+							styleClass="btn btn-success"
+							action="#{carhubService.addVehicle(vehicle)}" value="Update"></h:commandButton></td>
+				</tr>
+			</table>
+		</h:form>
+	</div>
 	<div id="main-container" class="container">
 		<div id="messages" class="alert alert-danger">
 			<h:messages></h:messages>
 		</div>
-		<div id="form-container" class="row">
-			<h1>Add Vehicle</h1>
-			<h:form id="vehicle-form">
-				<div class="col-md-12">
-					<table class="table">
-						<tr>
-							<td><h:inputText required="true" styleClass="form-control"
-									placeholder="Customer Name" id="name"
-									value="#{carhubService.customerInfo}"></h:inputText></td>
-						</tr>
-						<tr>
-							<td><h:inputText required="true" styleClass="form-control"
-									id="vehicle-number" value="#{vehicle.vehicleNumber}">
-								</h:inputText></td>
-							<td><h:inputText required="true" styleClass="form-control"
-									id="model" value="#{vehicle.model}"></h:inputText></td>
-						</tr>
-						<tr>
-							<td><h:inputText required="true" styleClass="form-control"
-									id="sold-date" value="#{vehicle.soldDate}">
-									<f:convertDateTime pattern="yyyy-MM-dd" />
-								</h:inputText></td>
-							<td><h:inputText required="true" styleClass="form-control"
-									id="kilometre" value="#{vehicle.kilometre}"></h:inputText></td>
-						</tr>
-						<tr align="center">
-							<td colspan="2"><input type="reset" class="btn btn-danger"
-								value="Reset" /> <h:commandButton styleClass="btn btn-success"
-									action="#{carhubService.addVehicle(vehicle)}"
-									value="Add Vehicle"></h:commandButton></td>
-						</tr>
-					</table>
-				</div>
-			</h:form>
-		</div>
 		<div id="table-container">
-			<c:if test="${!empty carhubService.listVehicle()}">
+			<h1>Vehicle List</h1>
+			<c:if test="${!empty carhubService.listVehicle(customer.customerId)}">
 				<table id="vehicle-list" class="display" cellspacing="0"
 					width="100%">
 					<thead>
@@ -114,16 +125,18 @@
 						</tr>
 					</thead>
 					<tbody>
-						<ui:repeat value="${carhubService.listVehicle()}" var="vehicle">
+						<ui:repeat
+							value="${carhubService.listVehicle(customer.customerId)}"
+							var="vehicle">
 							<tr>
-								<td>${vehicle.vehicleId}</td>
-								<td>${vehicle.vehicleNumber}</td>
-								<td>${vehicle.model}</td>
-								<td>${vehicle.soldDate}</td>
-								<td>${vehicle.kilometre}</td>
+								<td class="vehicle-id">${vehicle.vehicleId}</td>
+								<td class="vehicle-number">${vehicle.vehicleNumber}</td>
+								<td class="model">${vehicle.model}</td>
+								<td class="sold-date">${vehicle.soldDate}</td>
+								<td class="kilometre">${vehicle.kilometre}</td>
 								<td><h:link outcome="job" value="View">
 									</h:link></td>
-								<td>Edit</td>
+								<td align="center" class="edit-vehicle" style="cursor: pointer;">Edit</td>
 							</tr>
 						</ui:repeat>
 					</tbody>

@@ -69,14 +69,9 @@
 				<div class="col-md-12">
 					<table class="table">
 						<tr>
-							<td><c:if test="customer eq 0">
-									<h:inputText required="true" styleClass="form-control"
-										placeholder="Customer Name" id="name"
-										value="#{customer.customerName}"></h:inputText>
-								</c:if> <c:otherwise>
-									<div>Adding Vehicle for Customer :
-										#{carhubService.getCustomer(customerId).customerName}</div>
-								</c:otherwise></td>
+							<td><h:inputText required="true" styleClass="form-control"
+									placeholder="Customer Name" id="name"
+									value="#{carhubService.customerInfo}"></h:inputText></td>
 						</tr>
 						<tr>
 							<td><h:inputText required="true" styleClass="form-control"
@@ -96,7 +91,7 @@
 						<tr align="center">
 							<td colspan="2"><input type="reset" class="btn btn-danger"
 								value="Reset" /> <h:commandButton styleClass="btn btn-success"
-									action="#{carhubService.addVehicle(vehicle, customer)}"
+									action="#{carhubService.addVehicle(vehicle)}"
 									value="Add Vehicle"></h:commandButton></td>
 						</tr>
 					</table>
@@ -126,8 +121,8 @@
 								<td>${vehicle.model}</td>
 								<td>${vehicle.soldDate}</td>
 								<td>${vehicle.kilometre}</td>
-								<td><a
-									href="http://localhost:8080/dataentry/faces/job.xhtml">View</a></td>
+								<td><h:link outcome="job" value="View">
+									</h:link></td>
 								<td>Edit</td>
 							</tr>
 						</ui:repeat>

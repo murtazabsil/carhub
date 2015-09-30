@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:c="http://java.sun.com/jsp/jstl/core">
+<f:metadata>
+	<f:viewParam name="customerId" label="customerId"
+		value="#{customer.customerId}" />
+</f:metadata>
+<h:head>
+	<title>Vehicles</title>
+	<ui:include src="/header.xhtml"></ui:include>
+	<script type="text/javascript">
+		$(function() {
+			$('#job-list').dataTable();
+		});
+	</script>
+	<style>
+#customer-list tr th, #customer-list tr td {
+	text-align: center;
+}
+
+#main-container {
+	margin-top: 60px;
+}
+
+#form-container h1 {
+	text-align: center;
+}
+
+.btn {
+	margin-right: 10px;
+}
+</style>
+</h:head>
+<h:body>
+	<div id="main-container" class="container">
+		<div id="messages" class="alert alert-danger">
+			<h:messages></h:messages>
+		</div>
+		<div id="table-container">
+			<h1 align="center">Vehicle List</h1>
+			<c:if test="${!empty carhubService.listVehicle(customer.customerId)}">
+				<table id="job-list" class="display" cellspacing="0"
+					width="100%">
+					<thead>
+						<tr>
+							<th width="80">Vehicle Id</th>
+							<th width="120">Vehicle Number</th>
+							<th width="120">Vehicle Model</th>
+							<th width="120">Sold Date</th>
+							<th width="120">Kilometer</th>
+							<th width="120">View Job</th>
+							<th width="120">Edit</th>
+						</tr>
+					</thead>
+					<tbody>
+						<ui:repeat
+							value="${carhubService.listVehicle(customer.customerId)}"
+							var="vehicle">
+							<tr>
+								<td>${vehicle.vehicleId}</td>
+								<td>${vehicle.vehicleNumber}</td>
+								<td>${vehicle.model}</td>
+								<td>${vehicle.soldDate}</td>
+								<td>${vehicle.kilometre}</td>
+								<td><h:link outcome="job" value="View">
+									</h:link></td>
+								<td>Edit</td>
+							</tr>
+						</ui:repeat>
+					</tbody>
+				</table>
+			</c:if>
+		</div>
+	</div>
+</h:body>
+</html>

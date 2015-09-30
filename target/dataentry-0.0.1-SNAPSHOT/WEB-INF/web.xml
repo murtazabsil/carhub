@@ -19,11 +19,11 @@
         org.springframework.web.context.request.RequestContextListener
     </listener-class>
   </listener>
-  <listener>
+  <!-- <listener>
 		<listener-class>
 			org.quartz.ee.servlet.QuartzInitializerListener
 		</listener-class>
-	</listener>
+	</listener> -->
     <context-param>
         <param-name>javax.faces.PROJECT_STAGE</param-name>
         <param-value>Development</param-value>
