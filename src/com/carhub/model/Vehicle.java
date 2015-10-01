@@ -62,7 +62,7 @@ public class Vehicle implements java.io.Serializable {
 		this.vehicleId = vehicleId;
 	}
 
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "customer_id")
 	public Customer getCustomer() {
 		return this.customer;
@@ -109,7 +109,7 @@ public class Vehicle implements java.io.Serializable {
 		this.kilometre = kilometre;
 	}
 
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "vehicle")
+	@OneToMany(fetch = FetchType.EAGER, mappedBy = "vehicle")
 	public Set<Job> getJobs() {
 		return this.jobs;
 	}

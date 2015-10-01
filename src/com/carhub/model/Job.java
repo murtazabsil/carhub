@@ -65,7 +65,7 @@ public class Job implements java.io.Serializable {
 		this.jobId = jobId;
 	}
 
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "customer_id", nullable = false)
 	public Customer getCustomer() {
 		return this.customer;
@@ -75,7 +75,7 @@ public class Job implements java.io.Serializable {
 		this.customer = customer;
 	}
 
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "job_type_id", nullable = false)
 	public JobType getJobType() {
 		return this.jobType;
@@ -85,7 +85,7 @@ public class Job implements java.io.Serializable {
 		this.jobType = jobType;
 	}
 
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "vehicle_id")
 	public Vehicle getVehicle() {
 		return this.vehicle;
@@ -105,7 +105,7 @@ public class Job implements java.io.Serializable {
 		this.jobDate = jobDate;
 	}
 
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "job")
+	@OneToMany(fetch = FetchType.EAGER, mappedBy = "job")
 	public Set<Particular> getParticulars() {
 		return this.particulars;
 	}

@@ -1,8 +1,6 @@
 package com.carhub.service;
 
 import java.util.List;
-import java.util.Map;
-
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
 
@@ -84,7 +82,12 @@ public class CarhubServiceImpl implements CarhubService {
 	@Override
 	@Transactional
 	public List<Job> listJobs(long customerId, long vehicleId) {
-		return this.carhubDAO.listJobs(customerId, vehicleId);
+		if(customerId != 0 && vehicleId != 0)
+			return this.carhubDAO.listJobs(customerId, vehicleId);
+		else if(customerId != 0 && vehicleId == 0)
+			return this.carhubDAO.listJobs(customerId);
+		else
+			return this.carhubDAO.listJobs();
 	}
 
 	@Override
@@ -193,5 +196,11 @@ public class CarhubServiceImpl implements CarhubService {
 	@Transactional
 	public String listDataItems() {
 		return this.carhubDAO.listDataItems();
+	}
+
+	@Override
+	@Transactional
+	public List<Job> listJobs() {
+		return this.carhubDAO.listJobs();
 	}
 }

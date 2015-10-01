@@ -57,7 +57,7 @@ public class ItemData implements java.io.Serializable {
 		this.itemName = itemName;
 	}
 
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "itemData")
+	@OneToMany(fetch = FetchType.EAGER, mappedBy = "itemData")
 	public Set<Particular> getParticulars() {
 		return this.particulars;
 	}

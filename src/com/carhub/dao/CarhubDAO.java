@@ -28,6 +28,8 @@ public interface CarhubDAO {
 	
 	public List<Job> listJobs(long customerId);
 	
+	public List<Job> listJobs();
+	
 	public List<Job> listJobs(long customerId, long vehicleId);
 	
 	public void addUser(User user);

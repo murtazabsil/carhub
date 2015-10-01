@@ -75,7 +75,7 @@
 </style>
 </h:head>
 <h:body>
-	<div id="popup-container" title="Edit Customer Details."
+	<div id="popup-container" title="Edit Vehicle Details."
 		style="display: none;">
 		<h:form id="popup-vehicle">
 			<table class="table">
@@ -135,6 +135,8 @@
 								<td class="sold-date">${vehicle.soldDate}</td>
 								<td class="kilometre">${vehicle.kilometre}</td>
 								<td><h:link outcome="job" value="View">
+									<f:param name="customerId" value="#{customer.customerId}"></f:param>
+									<f:param name="vehicleId" value="#{vehicle.vehicleId}"></f:param>
 									</h:link></td>
 								<td align="center" class="edit-vehicle" style="cursor: pointer;">Edit</td>
 							</tr>

@@ -57,7 +57,7 @@ public class JobType implements java.io.Serializable {
 		this.jobTypeName = jobTypeName;
 	}
 
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "jobType")
+	@OneToMany(fetch = FetchType.EAGER, mappedBy = "jobType")
 	public Set<Job> getJobs() {
 		return this.jobs;
 	}

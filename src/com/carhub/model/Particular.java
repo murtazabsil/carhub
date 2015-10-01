@@ -53,7 +53,7 @@ public class Particular implements java.io.Serializable {
 		this.particularId = particularId;
 	}
 
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "item_id")
 	public ItemData getItemData() {
 		return this.itemData;
@@ -63,7 +63,7 @@ public class Particular implements java.io.Serializable {
 		this.itemData = itemData;
 	}
 
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "job_id")
 	public Job getJob() {
 		return this.job;

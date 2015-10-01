@@ -296,4 +296,12 @@ public class CarhubDAOImpl implements CarhubDAO {
 					+ itemData.getItemName());
 		return new Gson().toJson(listDataItems);
 	}
+
+	@Override
+	public List<Job> listJobs() {
+		Session session = this.sessionFactory.getCurrentSession();
+		@SuppressWarnings("unchecked")
+		List<Job> jobList = session.createQuery("from Job").list();
+		return jobList;
+	}
 }

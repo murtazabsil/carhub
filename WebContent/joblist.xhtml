@@ -10,6 +10,8 @@
 <f:metadata>
 	<f:viewParam name="customerId" label="customerId"
 		value="#{customer.customerId}" />
+	<f:viewParam name="vehicleId" label="vehicleId"
+		value="#{vehicle.vehicleId}" />
 </f:metadata>
 <h:head>
 	<title>Vehicles</title>
@@ -17,6 +19,13 @@
 	<script type="text/javascript">
 		$(function() {
 			$('#job-list').dataTable();
+			$('.view-particular').click(
+					function() {
+						$('#popup-container .particular').remove();
+						var dataToAppend = $(this).parent().parent().find(
+								'.particular');
+						$('#popup-container .table').append(dataToAppend);
+					});
 		});
 	</script>
 	<style>
@@ -38,39 +47,56 @@
 </style>
 </h:head>
 <h:body>
+	<div id="popup-container" title="Particulars." style="display: none;">
+		<table class="table">
+			<tr>
+				<th>Service</th>
+				<th>Part Price</th>
+				<th>Labour Price</th>
+				<th>Total Price</th>
+			</tr>
+		</table>
+	</div>
 	<div id="main-container" class="container">
 		<div id="messages" class="alert alert-danger">
 			<h:messages></h:messages>
 		</div>
 		<div id="table-container">
 			<h1 align="center">Vehicle List</h1>
-			<c:if test="${!empty carhubService.listVehicle(customer.customerId)}">
-				<table id="job-list" class="display" cellspacing="0"
-					width="100%">
+			<c:if
+				test="${!empty carhubService.listJobs(customer.customerId, vehicle.vehicleId)}">
+				<table id="job-list" class="display" cellspacing="0" width="100%">
 					<thead>
 						<tr>
-							<th width="80">Vehicle Id</th>
+							<th width="80">Job Number</th>
+							<th width="120">Customer Name</th>
+							<th width="120">Job Type</th>
 							<th width="120">Vehicle Number</th>
-							<th width="120">Vehicle Model</th>
-							<th width="120">Sold Date</th>
-							<th width="120">Kilometer</th>
-							<th width="120">View Job</th>
-							<th width="120">Edit</th>
+							<th width="120">Job date</th>
+							<th width="120">View Details</th>
 						</tr>
 					</thead>
 					<tbody>
 						<ui:repeat
-							value="${carhubService.listVehicle(customer.customerId)}"
-							var="vehicle">
+							value="${carhubService.listJobs(customer.customerId, vehicle.vehicleId)}"
+							var="job">
 							<tr>
-								<td>${vehicle.vehicleId}</td>
-								<td>${vehicle.vehicleNumber}</td>
-								<td>${vehicle.model}</td>
-								<td>${vehicle.soldDate}</td>
-								<td>${vehicle.kilometre}</td>
-								<td><h:link outcome="job" value="View">
-									</h:link></td>
-								<td>Edit</td>
+								<td>${job.jobId}</td>
+								<td>${job.customer.customerName}</td>
+								<td>${job.jobType.jobTypeName}</td>
+								<td>${job.vehicle.vehicleNumber}</td>
+								<td>${job.jobDate}</td>
+								<td align="center" style="cursor: pointer;"
+									class="view-particular">View</td>
+								<ui:repeat value="#{job.particulars}" var="particular">
+									<!-- <tr class="particular" style="display: none;">
+										<td>${particular.itemData.itemName}</td>
+										<td>${particular.partPrice}</td>
+										<td>${particular.labourPrice}</td>
+										<td>${particular.totalPrice}</td>
+									</tr> -->
+									<td>${particular.itemData.itemName}</td>
+								</ui:repeat>
 							</tr>
 						</ui:repeat>
 					</tbody>

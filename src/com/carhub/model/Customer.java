@@ -95,7 +95,7 @@ public class Customer implements java.io.Serializable {
 		this.contact = contact;
 	}
 
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "customer")
+	@OneToMany(fetch = FetchType.EAGER, mappedBy = "customer")
 	public Set<Vehicle> getVehicles() {
 		return this.vehicles;
 	}
@@ -104,7 +104,7 @@ public class Customer implements java.io.Serializable {
 		this.vehicles = vehicles;
 	}
 
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "customer")
+	@OneToMany(fetch = FetchType.EAGER, mappedBy = "customer")
 	public Set<Job> getJobs() {
 		return this.jobs;
 	}

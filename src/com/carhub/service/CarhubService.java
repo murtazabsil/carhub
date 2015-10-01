@@ -1,8 +1,6 @@
 package com.carhub.service;
 
 import java.util.List;
-import java.util.Map;
-
 import com.carhub.model.Customer;
 import com.carhub.model.Job;
 import com.carhub.model.JobType;
@@ -32,6 +30,8 @@ public interface CarhubService {
 	public void addJob(Vehicle vehicle);
 
 	public List<Job> listJobs(long customerId);
+	
+	public List<Job> listJobs();
 
 	public List<Job> listJobs(long customerId, long vehicleId);
 
