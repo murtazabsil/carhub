@@ -14,19 +14,43 @@
 		value="#{vehicle.vehicleId}" />
 </f:metadata>
 <h:head>
-	<title>Vehicles</title>
+	<title>Jobs</title>
 	<ui:include src="/header.xhtml"></ui:include>
 	<script type="text/javascript">
 		$(function() {
 			$('#job-list').dataTable();
 			$('.view-particular').click(
 					function() {
-						$('#popup-container .particular').remove();
+						$('#popup-container .particular tr').remove();
 						var dataToAppend = $(this).parent().parent().find(
 								'.particular');
-						$('#popup-container .table').append(dataToAppend);
+						var jobId = $(this).attr('job-id');
+						var data = particularsData[jobId];
+						var serviceTypeRow = document.createElement('tr');
+						var serviceTypeHead = document.createElement('th');
+						serviceTypeHead.textContent = serviceType[data[0].jobType];
+						serviceTypeRow.appendChild(serviceTypeHead);
+						$('#popup-container .table .particular').append(serviceTypeRow);
+						for(var index = 0; index < data.length; index++){
+							var particularRow = document.createElement('tr');
+							var itemTypeData = document.createElement('td');
+							var partPriceData = document.createElement('td');
+							var labourPriceData = document.createElement('td');
+							var totalPriceData = document.createElement('td');
+							itemTypeData.textContent = data[index].itemData;
+							partPriceData.textContent = data[index].partPrice;
+							labourPriceData.textContent = data[index].labourPrice;
+							totalPriceData.textContent = data[index].totalPrice;
+							particularRow.appendChild(itemTypeData);
+							particularRow.appendChild(partPriceData);
+							particularRow.appendChild(labourPriceData);
+							particularRow.appendChild(totalPriceData);
+							$('#popup-container .table .particular').append(particularRow);
+						}
 					});
 		});
+		var serviceType = ['Repair Service','Prepaid Service'];
+		var particularsData = #{carhubService.listJobsInJSON(customer.customerId, vehicle.vehicleId)};
 	</script>
 	<style>
 #customer-list tr th, #customer-list tr td {
@@ -49,12 +73,22 @@
 <h:body>
 	<div id="popup-container" title="Particulars." style="display: none;">
 		<table class="table">
-			<tr>
-				<th>Service</th>
-				<th>Part Price</th>
-				<th>Labour Price</th>
-				<th>Total Price</th>
-			</tr>
+			<thead>
+				<tr>
+					<th>Service</th>
+					<th>Part Price</th>
+					<th>Labour Price</th>
+					<th>Total Price</th>
+				</tr>
+			</thead>
+			<tbody class="particular">
+				<tr>
+					<th>Service</th>
+					<th>Part Price</th>
+					<th>Labour Price</th>
+					<th>Total Price</th>
+				</tr>
+			</tbody>
 		</table>
 	</div>
 	<div id="main-container" class="container">
@@ -87,16 +121,7 @@
 								<td>${job.vehicle.vehicleNumber}</td>
 								<td>${job.jobDate}</td>
 								<td align="center" style="cursor: pointer;"
-									class="view-particular">View</td>
-								<ui:repeat value="#{job.particulars}" var="particular">
-									<!-- <tr class="particular" style="display: none;">
-										<td>${particular.itemData.itemName}</td>
-										<td>${particular.partPrice}</td>
-										<td>${particular.labourPrice}</td>
-										<td>${particular.totalPrice}</td>
-									</tr> -->
-									<td>${particular.itemData.itemName}</td>
-								</ui:repeat>
+									class="view-particular" job-id="${job.jobId}">View</td>
 							</tr>
 						</ui:repeat>
 					</tbody>

@@ -56,22 +56,12 @@ public class CarhubDAOImpl implements CarhubDAO {
 	}
 
 	@Override
-	public void addVehicle(Vehicle vehicle, String customerInfo) {
+	public void addVehicle(Vehicle vehicle) {
 		// TODO Auto-generated method stub
 		Session session = this.sessionFactory.getCurrentSession();
 		if (vehicle.getVehicleId() != null) {
 			session.update(vehicle);
 		} else {
-			if (customerInfo.indexOf("|") != -1) {
-				String splittedCustomer[] = customerInfo.split("|");
-				vehicle.setCustomer(getCustomer(Long
-						.parseLong(splittedCustomer[0])));
-			} else {
-				Customer customer = new Customer();
-				customer.setCustomerName(customerInfo);
-				session.persist(customer);
-				vehicle.setCustomer(customer);
-			}
 			session.persist(vehicle);
 		}
 		logger.info("Customer added successfully with customer details as :"

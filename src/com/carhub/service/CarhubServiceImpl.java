@@ -1,6 +1,10 @@
 package com.carhub.service;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
 
@@ -11,6 +15,7 @@ import com.carhub.dao.CarhubDAO;
 import com.carhub.model.Customer;
 import com.carhub.model.Job;
 import com.carhub.model.JobType;
+import com.carhub.model.Particular;
 import com.carhub.model.User;
 import com.carhub.model.Vehicle;
 import com.carhub.vo.ParticularVO;
@@ -49,7 +54,7 @@ public class CarhubServiceImpl implements CarhubService {
 	@Override
 	@Transactional
 	public void addVehicle(Vehicle vehicle) {
-		this.carhubDAO.addVehicle(vehicle, this.customerInfo);
+		this.carhubDAO.addVehicle(vehicle);
 	}
 
 	@Override
@@ -202,5 +207,26 @@ public class CarhubServiceImpl implements CarhubService {
 	@Transactional
 	public List<Job> listJobs() {
 		return this.carhubDAO.listJobs();
+	}
+
+	@Override
+	@Transactional
+	public String listJobsInJSON(long customerId, long vehicleId) {
+		List<Job> listJob = listJobs(customerId, vehicleId);
+		Map<Long, List<ParticularVO>> map = new HashMap();
+		for(Job job : listJob){
+			List<ParticularVO> particularVOList = new ArrayList<ParticularVO>();
+			for(Particular particular : job.getParticulars()){
+				ParticularVO particularVO = new ParticularVO();
+				particularVO.setItemData(particular.getItemData().getItemName());
+				particularVO.setPartPrice(particular.getPartPrice());
+				particularVO.setLabourPrice(particular.getLabourPrice());
+				particularVO.setTotalPrice(particular.getTotalPrice());
+				particularVO.setJobType(job.getJobType().getJobTypeId());
+				particularVOList.add(particularVO);
+			}
+			map.put(job.getJobId(), particularVOList);
+		}
+		return new Gson().toJson(map);
 	}
 }

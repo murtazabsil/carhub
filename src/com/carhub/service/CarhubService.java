@@ -34,6 +34,8 @@ public interface CarhubService {
 	public List<Job> listJobs();
 
 	public List<Job> listJobs(long customerId, long vehicleId);
+	
+	public String listJobsInJSON(long customerId, long vehicleId);
 
 	public void addUser(User user);
 

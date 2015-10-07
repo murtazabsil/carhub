@@ -109,8 +109,9 @@
 			<h:messages></h:messages>
 		</div>
 		<div id="table-container">
-			<h1>Vehicle List</h1>
-			<c:if test="${!empty carhubService.listVehicle(customer.customerId)}">
+			<h1 align="center">Vehicle List</h1>
+			<c:if
+				test="${!empty carhubService.listVehicle(customer.customerId)}">
 				<table id="vehicle-list" class="display" cellspacing="0"
 					width="100%">
 					<thead>
@@ -135,8 +136,8 @@
 								<td class="sold-date">${vehicle.soldDate}</td>
 								<td class="kilometre">${vehicle.kilometre}</td>
 								<td><h:link outcome="job" value="View">
-									<f:param name="customerId" value="#{customer.customerId}"></f:param>
-									<f:param name="vehicleId" value="#{vehicle.vehicleId}"></f:param>
+										<f:param name="customerId" value="#{customer.customerId != null ? customer.customerId : 0}"></f:param>
+										<f:param name="vehicleId" value="#{vehicle.vehicleId}"></f:param>
 									</h:link></td>
 								<td align="center" class="edit-vehicle" style="cursor: pointer;">Edit</td>
 							</tr>
@@ -144,6 +145,9 @@
 					</tbody>
 				</table>
 			</c:if>
+			<c:otherwise>
+				<div>No Vehicles for this customer.</div>
+			</c:otherwise>
 		</div>
 	</div>
 </h:body>

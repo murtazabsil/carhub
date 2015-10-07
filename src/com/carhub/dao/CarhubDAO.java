@@ -16,7 +16,7 @@ public interface CarhubDAO {
 	
 	public List<Customer> listCustomer();
 	
-	public void addVehicle(Vehicle vehicle, String customerInfo);
+	public void addVehicle(Vehicle vehicle);
 	
 	public List<Vehicle> listVehicle();
 	
