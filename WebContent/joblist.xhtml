@@ -17,6 +17,7 @@
 	<title>Jobs</title>
 	<ui:include src="/header.xhtml"></ui:include>
 	<script type="text/javascript">
+	//<![CDATA[ 
 		$(function() {
 			$('#job-list').dataTable();
 			$('.view-particular').click(
@@ -26,31 +27,42 @@
 								'.particular');
 						var jobId = $(this).attr('job-id');
 						var data = particularsData[jobId];
-						var serviceTypeRow = document.createElement('tr');
-						var serviceTypeHead = document.createElement('th');
-						serviceTypeHead.textContent = serviceType[data[0].jobType];
-						serviceTypeRow.appendChild(serviceTypeHead);
-						$('#popup-container .table .particular').append(serviceTypeRow);
+						$('.type-of-service').html("Type of Service : " + serviceType[data[0].jobType]);
+						var totalPartPrice = 0, totalLabourPrice = 0, totalSumPrice = 0;
 						for(var index = 0; index < data.length; index++){
-							var particularRow = document.createElement('tr');
-							var itemTypeData = document.createElement('td');
-							var partPriceData = document.createElement('td');
-							var labourPriceData = document.createElement('td');
-							var totalPriceData = document.createElement('td');
-							itemTypeData.textContent = data[index].itemData;
-							partPriceData.textContent = data[index].partPrice;
-							labourPriceData.textContent = data[index].labourPrice;
-							totalPriceData.textContent = data[index].totalPrice;
-							particularRow.appendChild(itemTypeData);
-							particularRow.appendChild(partPriceData);
-							particularRow.appendChild(labourPriceData);
-							particularRow.appendChild(totalPriceData);
-							$('#popup-container .table .particular').append(particularRow);
+							totalPartPrice += data[index].partPrice;
+							totalLabourPrice += data[index].labourPrice;
+							totalSumPrice += data[index].totalPrice;
+							$('#popup-container .table .particular').append(
+								createServiceNode(data[index].itemData, data[index].partPrice, data[index].labourPrice, data[index].totalPrice));
 						}
+						$('#popup-container .table .particular').append(createServiceNode('Total Cost', totalPartPrice, totalLabourPrice, totalSumPrice));
+						$('#popup-container').dialog({
+							modal: true,
+							width: 650,
+							height: 600,
+						});
 					});
 		});
+		function createServiceNode(itemData, partPrice, labourPrice, totalPrice){
+			var particularRow = document.createElement('tr');
+			var itemTypeData = document.createElement('td');
+			var partPriceData = document.createElement('td');
+			var labourPriceData = document.createElement('td');
+			var totalPriceData = document.createElement('td');
+			itemTypeData.textContent = itemData;
+			partPriceData.textContent = partPrice;
+			labourPriceData.textContent = labourPrice;
+			totalPriceData.textContent = totalPrice;
+			particularRow.appendChild(itemTypeData);
+			particularRow.appendChild(partPriceData);
+			particularRow.appendChild(labourPriceData);
+			particularRow.appendChild(totalPriceData);
+			return particularRow;
+		}
 		var serviceType = ['Repair Service','Prepaid Service'];
 		var particularsData = #{carhubService.listJobsInJSON(customer.customerId, vehicle.vehicleId)};
+	//]]>
 	</script>
 	<style>
 #customer-list tr th, #customer-list tr td {
@@ -68,12 +80,23 @@
 .btn {
 	margin-right: 10px;
 }
+
+#popup-container th, #popup-container td {
+	border: 2px solid #ddd;
+}
+
+#popup-container .type-of-service, .ui-dialog-title {
+	text-align: center;
+}
 </style>
 </h:head>
 <h:body>
 	<div id="popup-container" title="Particulars." style="display: none;">
 		<table class="table">
 			<thead>
+				<tr>
+					<th colspan="4" class="type-of-service"></th>
+				</tr>
 				<tr>
 					<th>Service</th>
 					<th>Part Price</th>

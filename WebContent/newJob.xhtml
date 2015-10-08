@@ -74,6 +74,23 @@
 			var partPrice = parseFloat($(element).parent().parent().find('.part-price')[0].value) ;
 			var labourPrice = parseFloat($(element).parent().parent().find('.labour-price')[0].value);
 			$(element).parent().parent().find('.total-price')[0].value = (isNaN(partPrice) ? 0 : partPrice) + (isNaN(labourPrice) ? 0 : labourPrice);
+			calculateTotal();
+		}
+		
+		function calculateTotal(){
+			var partPrice = 0, labourPrice = 0, totalSum = 0;
+			$('.part-price').each(function(){
+				partPrice += isNaN(parseFloat($(this).val())) ? 0 : parseFloat($(this).val())
+			});
+			$('.labour-price').each(function(){
+				labourPrice += isNaN(parseFloat($(this).val())) ? 0 : parseFloat($(this).val())
+			});
+			$('.total-price').each(function(){
+				totalSum += isNaN(parseFloat($(this).val())) ? 0 : parseFloat($(this).val())
+			});
+			$($('.total-part-price')[0]).html(partPrice);
+			$($('.total-labour-price')[0]).html(labourPrice);
+			$($('.total-sum-price')[0]).html(totalSum);
 		}
 	</script>
 	<style>
@@ -175,6 +192,13 @@
 							<td><input type="button" class="btn" value="+"
 								onclick="addRow(this)" /><input type="button" class="btn"
 								value="-" onclick="removeRow(this)" /></td>
+						</tr>
+						<tr>
+							<td>Sum of Total Cost</td>
+							<td class="total-part-price">0</td>
+							<td class="total-labour-price">0</td>
+							<td class="total-sum-price">0</td>
+							<td></td>
 						</tr>
 						<tr align="center" class="button-row">
 							<td colspan="5"><input type="reset" class="btn btn-danger"
