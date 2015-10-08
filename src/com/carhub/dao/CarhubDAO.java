@@ -51,4 +51,6 @@ public interface CarhubDAO {
 	public void addJob(String customerInfo, Vehicle vehicle, List<ParticularVO> particularVOs);
 
 	public String listDataItems();
+	
+	public User login(User user);
 }

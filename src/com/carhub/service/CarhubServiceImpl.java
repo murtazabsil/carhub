@@ -229,4 +229,10 @@ public class CarhubServiceImpl implements CarhubService {
 		}
 		return new Gson().toJson(map);
 	}
+
+	@Override
+	@Transactional
+	public User login(User user) {
+		return this.carhubDAO.login(user);
+	}
 }

@@ -294,4 +294,18 @@ public class CarhubDAOImpl implements CarhubDAO {
 		List<Job> jobList = session.createQuery("from Job").list();
 		return jobList;
 	}
+
+	@Override
+	public User login(User user) {
+		Session session = this.sessionFactory.getCurrentSession();
+		User loginUser = (User) session
+				.createQuery(
+						"from User where userName = :userName and password = :password")
+				.setString("userName", user.getUserName())
+				.setString("password", user.getPassword()).uniqueResult();
+		if(loginUser != null)
+			return loginUser;
+		else
+			return null;
+	}
 }

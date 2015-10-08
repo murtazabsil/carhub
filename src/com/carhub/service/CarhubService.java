@@ -62,4 +62,6 @@ public interface CarhubService {
 	public void setVehicleInfo(String vehicleInfo);
 
 	public String listDataItems();
+	
+	public User login(User user);
 }
