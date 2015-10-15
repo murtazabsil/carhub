@@ -63,5 +63,7 @@ public interface CarhubService {
 
 	public String listDataItems();
 	
-	public User login(User user);
+	public String login(User user);
+	
+	public User getSessionUser();
 }

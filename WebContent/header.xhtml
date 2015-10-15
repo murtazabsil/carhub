@@ -4,6 +4,8 @@
 	xmlns:ui="http://java.sun.com/jsf/facelets"
 	xmlns:c="http://java.sun.com/jsp/jstl/core">
 <h:head>
+	<meta name="viewport"
+		content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"></meta>
 	<h:outputStylesheet library="css" name="jquery-ui.css"></h:outputStylesheet>
 	<h:outputStylesheet library="css" name="dataTables.jqueryui.min.css"></h:outputStylesheet>
 	<h:outputStylesheet library="css" name="bootstrap.min.css"></h:outputStylesheet>
@@ -42,8 +44,13 @@
 					<ul class="dropdown-menu">
 						<li><h:link value="Job for New User" outcome="newJob"></h:link></li>
 						<li><h:link value="Jobs for Exixting User" outcome="job"></h:link></li>
-						<li><h:link value="Job for New Vehicle" outcome="newJobVehicle"></h:link></li>
+						<li><h:link value="Job for New Vehicle"
+								outcome="newJobVehicle"></h:link></li>
 					</ul></li>
+				<c:if test="${carhubService.sessionUser.isadmin}">
+					<li><h:link value="Users" outcome="user" /></li>
+				</c:if>
+				<li><h:link value="Logout" outcome="login" /></li>
 			</ul>
 		</div>
 		<!--/.nav-collapse -->

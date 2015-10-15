@@ -7,6 +7,7 @@ import java.util.Map;
 
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
+import javax.faces.context.FacesContext;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -34,6 +35,8 @@ public class CarhubServiceImpl implements CarhubService {
 	public String customerInfo;
 
 	public String vehicleInfo;
+	
+	public User sessionUser;
 
 	public void setCarhubDAO(CarhubDAO carhubDAO) {
 		this.carhubDAO = carhubDAO;
@@ -43,6 +46,11 @@ public class CarhubServiceImpl implements CarhubService {
 	@Transactional
 	public void addCustomer(Customer customer) {
 		this.carhubDAO.addCustomer(customer);
+	}
+
+	@Override
+	public User getSessionUser() {
+		return (User) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("loggedInUser");
 	}
 
 	@Override
@@ -66,9 +74,9 @@ public class CarhubServiceImpl implements CarhubService {
 	@Override
 	@Transactional
 	public List<Vehicle> listVehicle(long customerId) {
-		if(customerId != 0)
+		if (customerId != 0)
 			return this.carhubDAO.listVehicle(customerId);
-		else 
+		else
 			return this.carhubDAO.listVehicle();
 	}
 
@@ -87,9 +95,9 @@ public class CarhubServiceImpl implements CarhubService {
 	@Override
 	@Transactional
 	public List<Job> listJobs(long customerId, long vehicleId) {
-		if(customerId != 0 && vehicleId != 0)
+		if (customerId != 0 && vehicleId != 0)
 			return this.carhubDAO.listJobs(customerId, vehicleId);
-		else if(customerId != 0 && vehicleId == 0)
+		else if (customerId != 0 && vehicleId == 0)
 			return this.carhubDAO.listJobs(customerId);
 		else
 			return this.carhubDAO.listJobs();
@@ -214,11 +222,12 @@ public class CarhubServiceImpl implements CarhubService {
 	public String listJobsInJSON(long customerId, long vehicleId) {
 		List<Job> listJob = listJobs(customerId, vehicleId);
 		Map<Long, List<ParticularVO>> map = new HashMap();
-		for(Job job : listJob){
+		for (Job job : listJob) {
 			List<ParticularVO> particularVOList = new ArrayList<ParticularVO>();
-			for(Particular particular : job.getParticulars()){
+			for (Particular particular : job.getParticulars()) {
 				ParticularVO particularVO = new ParticularVO();
-				particularVO.setItemData(particular.getItemData().getItemName());
+				particularVO
+						.setItemData(particular.getItemData().getItemName());
 				particularVO.setPartPrice(particular.getPartPrice());
 				particularVO.setLabourPrice(particular.getLabourPrice());
 				particularVO.setTotalPrice(particular.getTotalPrice());
@@ -232,7 +241,12 @@ public class CarhubServiceImpl implements CarhubService {
 
 	@Override
 	@Transactional
-	public User login(User user) {
-		return this.carhubDAO.login(user);
+	public String login(User user) {
+		User loggedInUser = this.carhubDAO.login(user);
+		if (loggedInUser != null) {
+			FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("loggedInUser", loggedInUser);
+			return "customer";
+		} else
+			return null;
 	}
 }

@@ -110,8 +110,7 @@
 		</div>
 		<div id="table-container">
 			<h1 align="center">Vehicle List</h1>
-			<c:if
-				test="${!empty carhubService.listVehicle(customer.customerId)}">
+			<c:if test="${!empty carhubService.listVehicle(customer.customerId)}">
 				<table id="vehicle-list" class="display" cellspacing="0"
 					width="100%">
 					<thead>
@@ -122,7 +121,9 @@
 							<th width="120">Sold Date</th>
 							<th width="120">Kilometer</th>
 							<th width="120">View Job</th>
-							<th width="120">Edit</th>
+							<c:if test="${carhubService.sessionUser.isadmin}">
+								<th width="120">Edit</th>
+							</c:if>
 						</tr>
 					</thead>
 					<tbody>
@@ -136,10 +137,14 @@
 								<td class="sold-date">${vehicle.soldDate}</td>
 								<td class="kilometre">${vehicle.kilometre}</td>
 								<td><h:link outcome="job" value="View">
-										<f:param name="customerId" value="#{customer.customerId != null ? customer.customerId : 0}"></f:param>
+										<f:param name="customerId"
+											value="#{customer.customerId != null ? customer.customerId : 0}"></f:param>
 										<f:param name="vehicleId" value="#{vehicle.vehicleId}"></f:param>
 									</h:link></td>
-								<td align="center" class="edit-vehicle" style="cursor: pointer;">Edit</td>
+								<c:if test="${carhubService.sessionUser.isadmin}">
+									<td align="center" class="edit-vehicle"
+										style="cursor: pointer;">Edit</td>
+								</c:if>
 							</tr>
 						</ui:repeat>
 					</tbody>

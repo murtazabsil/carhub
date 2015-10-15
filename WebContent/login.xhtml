@@ -10,6 +10,10 @@
 
 <h:head>
 	<title>Login</title>
+	<meta name="viewport"
+		content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"></meta>
+	<h:outputStylesheet library="css" name="bootstrap.min.css"></h:outputStylesheet>
+	<h:outputStylesheet library="css" name="bootstrap-theme.min.css"></h:outputStylesheet>
 	<style>
 #customer-list tr th, #customer-list tr td {
 	text-align: center;
@@ -26,21 +30,35 @@
 .btn {
 	margin-right: 10px;
 }
+
+#form {
+	width: 400px;
+	margin-top: 200px;
+	margin-left: 400px;
+	background:
+		url("/dataentry/faces/javax.faces.resource/images/ui-bg_highlight-soft_75_cccccc_1x100.jpg")
+		repeat-x scroll 0 0;
+}
 </style>
 </h:head>
 <h:body>
-	<div id="form"">
+	<div id="form">
 		<h:form id="login">
-			<table class="table">
+			<table align="center" class="table">
 				<tr>
-					<td>UserName : </td>
+					<td colspan="2" align="center"><h:graphicImage
+							style="width: 200px; height: 50px;"
+							value="/dataentry/faces/javax.faces.resource/images/logo.png"></h:graphicImage></td>
+				</tr>
+				<tr>
+					<td>UserName :</td>
 					<td><h:inputText required="true" styleClass="form-control"
 							id="username" value="#{user.userName}"></h:inputText></td>
 				</tr>
 				<tr>
 					<td>Password :</td>
-					<td><h:inputTextarea styleClass="form-control" cols="30"
-							rows="2" id="password" value="#{user.password}"></h:inputTextarea></td>
+					<td><h:inputText styleClass="form-control" cols="30" rows="2"
+							id="password" value="#{user.password}"></h:inputText></td>
 				</tr>
 				<tr>
 					<td colspan="2" align="center"><h:commandButton

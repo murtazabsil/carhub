@@ -73,7 +73,8 @@
 							rows="2" id="address" value="#{customer.address}"></h:inputTextarea></td>
 				</tr>
 				<tr>
-					<td colspan="2" align="center"><h:commandButton styleClass="btn btn-success"
+					<td colspan="2" align="center"><h:commandButton
+							styleClass="btn btn-success"
 							action="#{carhubService.addCustomer(customer)}" value="Update"></h:commandButton></td>
 				</tr>
 			</table>
@@ -97,7 +98,9 @@
 							<th width="120">Contact</th>
 							<th width="120">View Vehicle</th>
 							<th width="120">View Job</th>
-							<th width="120">Edit</th>
+							<c:if test="${carhubService.sessionUser.isadmin}">
+								<th width="120">Edit</th>
+							</c:if>
 						</tr>
 					</thead>
 					<tbody>
@@ -113,7 +116,9 @@
 									</h:link></td>
 								<td><a
 									href="http://localhost:8080/dataentry/faces/job.xhtml">View</a></td>
-								<td style="cursor: pointer;" class="edit-customer">Edit</td>
+								<c:if test="${carhubService.sessionUser.isadmin}">
+									<td style="cursor: pointer;" class="edit-customer">Edit</td>
+								</c:if>
 							</tr>
 						</ui:repeat>
 					</tbody>
