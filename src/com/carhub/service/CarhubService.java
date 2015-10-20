@@ -1,11 +1,13 @@
 package com.carhub.service;
 
 import java.util.List;
+
 import com.carhub.model.Customer;
 import com.carhub.model.Job;
 import com.carhub.model.JobType;
 import com.carhub.model.User;
 import com.carhub.model.Vehicle;
+import com.carhub.vo.DashboardVO;
 
 public interface CarhubService {
 
@@ -66,4 +68,6 @@ public interface CarhubService {
 	public String login(User user);
 	
 	public User getSessionUser();
+	
+	public List<DashboardVO> getDashboardContent();
 }

@@ -16,6 +16,15 @@
 	<h:outputScript library="js" name="dataTables.jqueryui.min.js"></h:outputScript>
 	<h:outputScript library="js" name="bootstrap.min.js"></h:outputScript>
 	<h:outputScript library="js" name="npm.js"></h:outputScript>
+	<script type="text/javascript">
+		$().ready(function() {
+			$('ul.nav li').removeClass('active');
+			var url = window.location;
+			$('ul.nav a').filter(function() {
+				return this.href == url;
+			}).parent().addClass('active');
+		});
+	</script>
 </h:head>
 <nav class="navbar navbar-inverse navbar-fixed-top">
 	<div class="container">
@@ -34,7 +43,9 @@
 		</div>
 		<div class="navbar-collapse collapse" id="navbar">
 			<ul class="nav navbar-nav">
-				<li class="active"><h:link value="Customers" outcome="customer"></h:link></li>
+				<li class="active"><h:link value="DashBoard"
+						outcome="dashboard"></h:link></li>
+				<li><h:link value="Customers" outcome="customer"></h:link></li>
 				<li><h:link value="Vehicle" outcome="vehicle"></h:link></li>
 				<li><h:link value="Jobs" outcome="joblist"></h:link></li>
 				<li></li>

@@ -1,5 +1,6 @@
 package com.carhub.service;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -19,6 +20,7 @@ import com.carhub.model.JobType;
 import com.carhub.model.Particular;
 import com.carhub.model.User;
 import com.carhub.model.Vehicle;
+import com.carhub.vo.DashboardVO;
 import com.carhub.vo.ParticularVO;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -35,7 +37,7 @@ public class CarhubServiceImpl implements CarhubService {
 	public String customerInfo;
 
 	public String vehicleInfo;
-	
+
 	public User sessionUser;
 
 	public void setCarhubDAO(CarhubDAO carhubDAO) {
@@ -50,7 +52,8 @@ public class CarhubServiceImpl implements CarhubService {
 
 	@Override
 	public User getSessionUser() {
-		return (User) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("loggedInUser");
+		return (User) FacesContext.getCurrentInstance().getExternalContext()
+				.getSessionMap().get("loggedInUser");
 	}
 
 	@Override
@@ -244,9 +247,31 @@ public class CarhubServiceImpl implements CarhubService {
 	public String login(User user) {
 		User loggedInUser = this.carhubDAO.login(user);
 		if (loggedInUser != null) {
-			FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("loggedInUser", loggedInUser);
-			return "customer";
+			FacesContext.getCurrentInstance().getExternalContext()
+					.getSessionMap().put("loggedInUser", loggedInUser);
+			return "dashboard";
 		} else
 			return null;
+	}
+
+	@Override
+	@Transactional
+	public List<DashboardVO> getDashboardContent() {
+		List<Job> jobList = this.carhubDAO.getDashboardJobs();
+		List<DashboardVO> dashboardVOList = new ArrayList<DashboardVO>();
+		for (Job job : jobList) {
+			DashboardVO dashboardVO = new DashboardVO();
+			dashboardVO.setCustomerName(job.getCustomer().getCustomerName());
+			dashboardVO.setServiceDate(new SimpleDateFormat().format(job
+					.getJobDate()));
+			dashboardVO.setServiceProvided(job.getJobType().getJobTypeName());
+			dashboardVO.setContactEmail(job.getCustomer().getEmailId());
+			dashboardVO
+					.setContactNumber(job.getCustomer().getContact() != null ? job
+							.getCustomer().getContact().toString()
+							: "");
+			dashboardVOList.add(dashboardVO);
+		}
+		return dashboardVOList;
 	}
 }

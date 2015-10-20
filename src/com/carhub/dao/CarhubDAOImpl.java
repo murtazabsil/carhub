@@ -5,7 +5,9 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.ResourceBundle;
 
+import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.slf4j.Logger;
@@ -303,9 +305,19 @@ public class CarhubDAOImpl implements CarhubDAO {
 						"from User where userName = :userName and password = :password")
 				.setString("userName", user.getUserName())
 				.setString("password", user.getPassword()).uniqueResult();
-		if(loginUser != null)
+		if (loginUser != null)
 			return loginUser;
 		else
 			return null;
+	}
+
+	@Override
+	public List<Job> getDashboardJobs() {
+		Session session = this.sessionFactory.getCurrentSession();
+		ResourceBundle resourceBundle = ResourceBundle.getBundle("config");
+		String numOfDays = resourceBundle.getString("serviceNotificationDays");
+		@SuppressWarnings("unchecked")
+		List<Job> jobList = session.createQuery("Select j from Job j where DATEDIFF(SYSDATE(), j.jobDate) < "+ numOfDays).list();
+		return jobList;
 	}
 }

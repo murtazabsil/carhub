@@ -10,16 +10,55 @@
 <h:head>
 	<title>Dashboard</title>
 	<ui:include src="/header.xhtml"></ui:include>
+	<script type="text/javascript">
+		$().ready(function(){
+			$('#dashboard-table').dataTable();			
+		});
+	</script>
 	<style>
 #main-container {
 	margin-top: 60px;
+}
+
+#main-container .row .col-md-4 {
+	font-size: 30px;
+	font-weight: bold;
+	text-align: center;
+	border: 10px solid white;
+}
+
+#main-container .row .col-md-4:nth-child(1) {
+	background-color: green;
+}
+
+#main-container .row .col-md-4:nth-child(2) {
+	background-color: cyan;
+}
+
+#main-container .row .col-md-4:nth-child(3) {
+	background-color: grey;
 }
 </style>
 </h:head>
 <h:body>
 	<div id="main-container" class="container">
 		<div class="row">
-			<table class="table">
+			<div class="col-md-4">
+				Registered Customers<br />
+				<h:outputText value="#{carhubService.listCustomer().size()}" />
+			</div>
+			<div class="col-md-4">
+				Registered Vehicles<br />
+				<h:outputText value="#{carhubService.listVehicle().size()}" />
+			</div>
+			<div class="col-md-4">
+				Registered Jobs<br />
+				<h:outputText value="#{carhubService.listJobs().size()}" />
+			</div>
+		</div>
+		<div class="row">
+			<table id="dashboard-table" class="display" cellspacing="0"
+				width="100%">
 				<thead>
 					<tr>
 						<th>Customer Name</th>
@@ -30,14 +69,20 @@
 					</tr>
 				</thead>
 				<tbody>
-					
+					<c:if test="${!empty carhubService.getDashboardContent()}">
+						<ui:repeat value="${carhubService.getDashboardContent()}"
+							var="dashboardObj">
+							<tr>
+								<td>${dashboardObj.customerName}</td>
+								<td>${dashboardObj.serviceProvided}</td>
+								<td>${dashboardObj.serviceDate}</td>
+								<td>${dashboardObj.contactNumber}</td>
+								<td>${dashboardObj.contactEmail}</td>
+							</tr>
+						</ui:repeat>
+					</c:if>
 				</tbody>
 			</table>
-		</div>
-		<div class="row">
-			<div class=".col-md-4">Test</div>
-			<div class=".col-md-4">Test</div>
-			<div class=".col-md-4">Test</div>
 		</div>
 	</div>
 </h:body>

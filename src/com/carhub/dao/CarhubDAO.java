@@ -53,4 +53,6 @@ public interface CarhubDAO {
 	public String listDataItems();
 	
 	public User login(User user);
+	
+	public List<Job> getDashboardJobs();
 }
